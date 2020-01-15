@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.diegorossi.cursospring.domain.Produto;
 import com.diegorossi.cursospring.repositories.ProdutoRepository;
+import com.diegorossi.cursospring.services.services.exception.ObjectNotFoundException;
 
 @Service
 public class ProdutoService {
@@ -16,6 +17,7 @@ public class ProdutoService {
 
 	public Produto buscar(Integer id) {
 		Optional<Produto> obj = produtoRepository.findById(id);
-		return obj.orElse(null);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Produto.class.getName()));
 	}
 }
