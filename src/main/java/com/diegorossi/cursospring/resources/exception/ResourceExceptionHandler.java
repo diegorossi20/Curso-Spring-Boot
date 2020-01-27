@@ -1,7 +1,5 @@
 package com.diegorossi.cursospring.resources.exception;
 
-import java.util.function.Consumer;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
@@ -36,9 +34,13 @@ public class ResourceExceptionHandler {
 		ValidationError err = new ValidationError(HttpStatus.BAD_REQUEST.value(), "Erro de Validação",
 				System.currentTimeMillis());
 
-		for (FieldError x : e.getBindingResult().getFieldErrors()) {
-			err.addError(x.getField(), x.getDefaultMessage());
-		}
+		/*
+		 * for (FieldError x : e.getBindingResult().getFieldErrors()) {
+		 * err.addError(x.getField(), x.getDefaultMessage()); }
+		 */
+
+		e.getBindingResult().getFieldErrors()
+				.forEach((FieldError x) -> err.addError(x.getField(), x.getDefaultMessage()));
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
 	}
